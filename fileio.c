@@ -47,17 +47,16 @@ int* filetointarray(char* filename, int l) //l = lines of file
 	return array;	
 }
 
-trienode* filetotrie(char *filename) //l = lines of file
+trienode* filetotrie(char* filename) //l = lines of file
 {
 	FILE* f = fopen(filename, "r");
 	char word[80];
-	trienode* root;
-	root = newtrienode();
+	trienode* root = newtrienode();
 	
-	while (fgets(word, 80, f) != NULL)
+	while (fscanf(f, "%79s", &word) == 1)
 	{
 		printf("%s", word);
-		trieinsert(root, word);
+		trieinsert(&root, word);
 	}
 	fclose(f);
 	return root;

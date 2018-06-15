@@ -20,21 +20,20 @@ static int chartoi(char c) //helper function for a = 0, ... z = 25
 
 trienode* newtrienode(void)
 {
+	int i = 0;
 	trienode* node = NULL;
 	node = (trienode *)malloc(sizeof(trienode));
-	node->leaf = true;
-		
+	node->leaf = false;
 	for (i = 0; i < 26; i++)
 	{
 		node->character[i] = NULL;
 	}	
-
 	return node;
 }
 
 void trieinsert(trienode** root, const char* word)
 {
-	trienode* c = *head;
+	trienode* c = *root;
 	while (*word)
 	{
 		if (c->character[chartoi(*word)] == NULL)
@@ -72,7 +71,7 @@ static bool child(trienode* node)
 	int i = 0;
 	for (i = 0; i < 26; i++)
 	{
-		if (c->character[i])
+		if (node->character[i])
 		{
 			return true;
 		}
@@ -116,7 +115,7 @@ bool triedelete(trienode** root, const char* word)
 		}
 		else
 		{
-			(*root)->leaf = true;
+			(*root)->leaf = false;
 			return false;
 		}
 	}
