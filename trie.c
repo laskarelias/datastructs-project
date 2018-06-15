@@ -3,82 +3,122 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "inc/fileio.h"
 #include "inc/trie.h"
 
-struct trie_node
-{
-	struct trie_node *nextnode[26];
-	bool end;
-};
-typedef struct trie_node trienode;
 
-int chartoi(char c) //helper function for a = 0, ... z = 26
+
+static int chartoi(char c) //helper function for a = 0, ... z = 25
 {
-	// capital to lowercase
-	if (c < 91 && c > 64)
+	if ((int)c < 91 && (int)c > 64) // capital to lowercase
 	{
 		c += 32;
 	}
 	c -= 97;
 	
-	return c;
+	return (int)c;
 }
 
 trienode* newtrienode(void)
 {
-	trienode *node = NULL;
+	trienode* node = NULL;
 	node = (trienode *)malloc(sizeof(trienode));
-	
-	if (node)
+	node->leaf = true;
+		
+	for (i = 0; i < 26; i++)
 	{
-		int i;
-		node->end = false;
-		
-		for (i = 0; i < 26; i++)
-		{
-			node->nextnode[i] = NULL;
-		}
-		
-		return node;
-	}
+		node->character[i] = NULL;
+	}	
+
+	return node;
 }
 
-void insert(trienode *root, const char *word)
+void trieinsert(trienode** root, const char* word)
 {
-	int level;
-	int length = strlen(word);
-	int i;
-	trienode *c = root;
-	
-	for (level = 0; level < length; level++)
+	trienode* c = *head;
+	while (*word)
 	{
-		i = chartoi(word[level]);
-		if (!c->nextnode[i])
+		if (c->character[chartoi(*word)] == NULL)
 		{
-			c->nextnode[i] = newtrienode;
+			c->character[chartoi(*word)] = newtrienode();
 		}
-		c = c->nextnode[i];
+		c = c->character[chartoi(*word)]; // next node
+		word++; // next character of word	
 	}
+	c->leaf = true;
 }
 
-bool triesearch(trienode *root, const char *word)
+bool triesearch(trienode* root, const char* word)
 {
-	int level;
-	int length = strlen(key);
-	int i;
-	trienode *c = root;
-	
-	for (level = 0; level < length; level++)
+	if (root == NULL)
 	{
-		i = chartoi(word[level]);
-		if (!c->nextnode[i])
+		return false;
+	}
+	
+	trienode* c = root;
+	while (*word)
+	{
+		c = c->character[chartoi(*word)];
+		if (c == NULL)
 		{
 			return false;
 		}
-		
-		c = c->nextnode[i];
-	}	
-	return (c != NULL && c->end);
+		word++;
+	}
+	return c->leaf;
 }
 
+static bool child(trienode* node)
+{
+	int i = 0;
+	for (i = 0; i < 26; i++)
+	{
+		if (c->character[i])
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool triedelete(trienode** root, const char* word)
+{
+	if (*root == NULL)
+	{
+		return false;
+	}
+	
+	if (*word)
+	{
+		if (*root != NULL &&
+		   (*root)->character[chartoi(*word)] != NULL &&
+		   triedelete(&((*root)->character[chartoi(*word)]), word + 1) &&
+		   (*root)->leaf == false)
+		{
+			if (!child(*root))
+			{
+				free(*root);
+				(*root) = NULL;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+	if (*word == '\0' && (*root)->leaf)
+	{
+		if (!child(*root))
+		{
+			free(*root);
+			(*root) = NULL;
+			return true;
+		}
+		else
+		{
+			(*root)->leaf = true;
+			return false;
+		}
+	}
+	return false;
+}
