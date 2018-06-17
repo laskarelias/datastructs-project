@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+/* Ορισμός τύπου χρώματος κόμβου */
 typedef enum color_type
 {
-	red, black
+	red, black /* Κόκκινο = 0, Μαύρο = 1 */
 }
 colortype;
 
@@ -18,15 +19,15 @@ typedef rbnode* rbtree;
 
 struct rb_node
 {
-	int d;         //data
-	rbtree l;      //left
-	rbtree r;      //right
-	colortype c;   //color
+	int d;         /* δεδομένα */
+	rbtree l;      /* δείκτης στο αριστερό παιδί του κόμβου */
+	rbtree r;      /* δείκτης στο δεξί παιδί του κόμβου */
+	colortype c;   /* χρώμα (“red” ή “black”) */
 };
 
-rbtree rbinit(void);
-//static rbtree rbnull(rbtree root);
-rbtree rbempty(rbtree root);
+rbtree rbinit(void); /* Δέσμευση μνήμης για το δέντρο */
+//static rbtree rbnull(rbtree root); /* Αρχικοποίηση κόμβων */
+rbtree rbempty(rbtree root); 
 //static position rbleft(position b);
 //static position rbright(position a);
 //static position rbrotate(int data, position p);

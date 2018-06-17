@@ -14,14 +14,14 @@
 
 int main()
 {
-//	int* arr;
-//	int i = 0;
-//	int search = 0;
+	int* arr;
+	int i = 0;
+	int search = 0;
 	char searchword[80];
-//	int found = 0;
-//	int lines = 0;
+	int found = 0;
+	int lines = 0;
 	trienode* trie;
-/*
+
 	lines = countlines(INTEGERS);
 	
 	if (lines > 0)
@@ -51,7 +51,6 @@ int main()
 	found = interpolationsearch(arr, lines, search);
 	printf("Found %d with Interpolation Search at location %d\n", search, found);
 	
-*/
 	trie = filetotrie(WORDS);
 	
 	printf("Trie search for: ");
@@ -82,7 +81,7 @@ int main()
 		printf("Word \"%s\" was not found in trie\n", searchword);
 	}
 
-/*
+
 	rbtree redblack;
 	redblack = rbinit();
 	redblack = rbempty(redblack);
@@ -102,8 +101,6 @@ int main()
 
 	printf("inserts are complete\n");
 	rbprint(redblack);
-		
-*/
 	
 	return 0;
 }

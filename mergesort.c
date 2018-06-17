@@ -1,6 +1,9 @@
 #include "inc/sort.h"
 
-int* merge(int *array, int left, int mid, int right)
+/* Χρησιμοποιώντας δύο βοηθητικούς πίνακες L και R, χωρίζουμε τον
+δοσμένο πίνακα. Έπειτα, τους συγχωνέυουμε στον δοσμένο πίνακα,
+επιλέγοντας κάθε φορά το μικρότερο στοιχείο */
+int* merge(int* array, int left, int mid, int right)
 {
 	int i, j, k = 0;
 	int x = mid - left + 1;
@@ -8,7 +11,8 @@ int* merge(int *array, int left, int mid, int right)
 	
 	int L[x], R[y];
 	
-	//copy data to arrays L and R
+	/* Δημιουργία βοηθητικών πινάκων L (αριστερό μέρος) και 
+	R (δεξί μέρος) */
 	for (i = 0; i < x; i++)
 	{
 		L[i] = array[left + i];
@@ -18,7 +22,8 @@ int* merge(int *array, int left, int mid, int right)
 		R[j] = array[mid + j + 1];
 	}
 	
-	//merging
+	/* Συγχώνευση με επιλογή του μικρότερου στοιχείου από τους 
+	πίνακες L και R */
 	i = 0;
 	j = 0;
 	k = left;
@@ -56,15 +61,19 @@ int* merge(int *array, int left, int mid, int right)
 	return array;
 }
 
-void mergesort(int *array, int left, int right)
+/* Αλγόριθμος διαίρει-και-βασίλευε για merge sort */
+void mergesort(int* array, int left, int right)
 {
 	if (left < right)
 	{
-		int mid = left + (right - left) / 2;
-		mergesort(array, left, mid);
-		mergesort(array, mid + 1, right);
+		int mid = left + (right - left) / 2;/* Εύρεση μέσου του πίνακα */
+		mergesort(array, left, mid);		/* Αναδρομικό κάλεσμα για τον
+											αριστερό υποπίνακα */
+		mergesort(array, mid + 1, right);	/* Αναδρομικό κάλεσμα για τον
+											δεξιό υποπίνακα */
 		
-		merge(array, left, mid, right);
+		merge(array, left, mid, right);		/* Συγχώνευση αριστερού και
+											δεξιού υποπίνακα */
 	}
 }
 
