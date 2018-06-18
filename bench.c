@@ -16,7 +16,6 @@ void bench(int x, int* arr, int lines)
 	int search;
 	int i;
 	int max = arr[lines];
-	int found;
 	
 	srand(time(0));
 
@@ -24,7 +23,7 @@ void bench(int x, int* arr, int lines)
 	{
 		search = rand() % (max + 1);
 		start = clock();
-		found = linearsearch(arr, lines + 1, search);			
+		linearsearch(arr, lines + 1, search);			
 		end = clock();
 		t = (double)(end - start) / CLOCKS_PER_SEC;
 		total += t;
@@ -43,7 +42,7 @@ void bench(int x, int* arr, int lines)
 	{
 		search = rand() % (max + 1);
 		start = clock();
-		found = binarysearch(arr, 0, lines + 1, search);		
+		binarysearch(arr, 0, lines + 1, search);		
 		end = clock();
 		t = (double)(end - start) / CLOCKS_PER_SEC;
 		total += t;
@@ -62,7 +61,7 @@ void bench(int x, int* arr, int lines)
 	{
 		search = (rand() % (max +1)) + 1;
 		start = clock();
-		found = interpolationsearch(arr, lines + 1, search);
+		interpolationsearch(arr, lines + 1, search);
 		end = clock();
 		t = (double)(end - start) / CLOCKS_PER_SEC;
 		total += t;

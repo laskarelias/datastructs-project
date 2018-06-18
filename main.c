@@ -22,7 +22,6 @@ int main()
 	int found = 0; /* Αποτέλεσμα αναζήτησης */
 	rbtree redblack; /* Κεφαλίδα red-black */
 	position rbfound; /* Αποτέλεσμα αναζήτησης red-black */
-	position nullnode = NULL;
 	trienode* trie; /* Ρίζα trie */
 	char searchword[80]; /* Αναζήτηση στο trie */
 	
@@ -96,7 +95,7 @@ int main()
 					exit = 1;
 				}
 				rbfound = rbsearch(search, redblack);
-				if (rbfound = rbsearch(search, redblack) != NULL)
+				if ((rbfound = rbsearch(search, redblack)) != NULL)
 				{
 					printf("Found %d with Red-Black Search\n", search);
 				}
