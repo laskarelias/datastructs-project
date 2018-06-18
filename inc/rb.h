@@ -26,14 +26,13 @@ struct rb_node
 };
 
 rbtree rbinit(void); /* Δέσμευση μνήμης για το δέντρο */
-//static rbtree rbnull(rbtree root); /* Αρχικοποίηση κόμβων */
-rbtree rbempty(rbtree root); 
-//static position rbleft(position b);
-//static position rbright(position a);
-//static position rbrotate(int data, position p);
-//static void rbfix(int data, rbtree root);
-rbtree rbinsert(int data, rbtree root);
-//static void rbprint2(rbtree root);
-void rbprint(rbtree root);
+//static rbtree rbnull(rbtree root); /* Βοηθητική συνάρτηση αρχικοποίησης */
+rbtree rbempty(rbtree root); /* Ελευθέρωση κόμβων για αρχικοποίηση */
+//static position rbleft(position b); /* Δεξιά περιστροφή */
+//static position rbright(position a); /* Αριστερή περιστροφή */
+//static position rbrotate(int data, position p); /* Αλλαγή κόμβου με πατέρα */
+//static void rbfix(int data, rbtree root); /* Βοηθητική συνάρτηση διόρθωσης */
+rbtree rbinsert(int data, rbtree root); /* Εισαγωγή στο red-black δέντρο */
+position rbsearch(int s, rbtree root); /* Αναζήτηση στο red-black δέντρο */
 
 #endif

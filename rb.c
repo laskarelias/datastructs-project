@@ -138,10 +138,6 @@ rbtree rbinsert(int data, rbtree root)
 		}
 	}
 	
-	if (x != nullnode)
-	{
-		return nullnode; /* Επέστρεψε κενό κόμβο, το x υπάρχει ήδη */
-	}
 	x = malloc(sizeof(rbnode)); /* Δημιουργία κόμβου */
 	x->d = data; /* Αποθήκευση δεδομένων στον κόμβο */
 	x->l = x->r = nullnode; /* Θέση κενών φύλλων ως παιδιών του νέου κόμβου */
@@ -158,17 +154,26 @@ rbtree rbinsert(int data, rbtree root)
 	return root;
 }
 
-static void rbprint2(rbtree root)
+/* Αναδρομική αναζήτηση, Συγκρίνει το στοιχείο προς αναζήτηση με το δεδομένο
+   στον κόμβο και αν δεν είναι ίσο, ψάχνει στο αριστερό υπόδεντρο αν είναι
+   μικρότερο, ή στο δεξί υπόδεντρο αν είναι μεγαλύτερο */
+position rbsearch(int s, rbtree root)
 {
-	if (root != nullnode)
-	{
-		rbprint2(root->l);
-		printf("%d %d\n", root->d, root->c);
-		rbprint2(root->r);
+    if (root == nullnode) /* Έλεγχος κενού κόμβου */
+    {
+        return NULL; /* Το στοιχείο δεν βρέθηκε */
+    }
+    
+    if (s < root->d) /* Σύγκριση στοιχείου με δεδομένο κόμβου */
+    {
+        return rbsearch(s, root->l); /* Αναδρομή στο αριστερό υποδέντρο */
+    }
+    else if (s > root->d) /* Σύγκριση στοιχείου με δεδομένο κόμβου */
+    {
+       	return rbsearch(s, root->r); /* Αναδρομή στο δεξί υποδέντρο */
+    }
+    else
+    {
+        return root; /* Το στοιχείο βρέθηκε */
 	}
-}
-
-void rbprint(rbtree root) /* In-order εκτύπωση του δέντρου */
-{
-	rbprint2(root->r); /* Αποφυγή εκτύπωσης -1 (κανένα δεδομένο) */
 }

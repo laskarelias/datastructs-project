@@ -6,24 +6,27 @@
 #include "inc/trie.h"
 
 
-
-static int chartoi(char c) //helper function for a = 0, ... z = 25
+/* Βοηθητική συνάρτηση, μετατρέπει τα κεφαλαία σε μικρά και τους χαρακτήρες σε
+   θέσεις πίνακα (από 0 εώς 25) */
+static int chartoi(char c)
 {
-	if ((int)c < 91 && (int)c > 64) // capital to lowercase
+	if ((int)c < 91 && (int)c > 64) /* Κεφαλαία σε μικρά */
 	{
 		c += 32;
 	}
-	c -= 97;
+	c -= 97; /* Χαρακτήρας σε θέση πίνακα */
 	
 	return (int)c;
 }
 
+/* Αρχικοποίηση κόμβου trie */
 trienode* newtrienode(void)
 {
-	int i = 0;
-	trienode* node = NULL;
-	node = (trienode *)malloc(sizeof(trienode));
+	int i = 0; /* Βοηθητικός μετρητής */
+	trienode* node = NULL; /* Δημιουργία κόμβου */
+	node = (trienode *)malloc(sizeof(trienode)); /* Δέσμευση μνήμης */
 	node->leaf = false;
+	/* Αρχικοποίηση πίνακα κόμβου */
 	for (i = 0; i < 26; i++)
 	{
 		node->character[i] = NULL;
@@ -31,47 +34,51 @@ trienode* newtrienode(void)
 	return node;
 }
 
+/* Προσπελαύνει ένα ένα τα επίπεδα του trie και προσθέτει τα γράμματα */
 void trieinsert(trienode** root, const char* word)
 {
 	trienode* c = *root;
-	while (*word)
+	while (*word) /* Σειριακή προσπέλαση λέξης */
 	{
+		/* Δημιουργία κόμβου που λείπει */
 		if (c->character[chartoi(*word)] == NULL)
 		{
 			c->character[chartoi(*word)] = newtrienode();
 		}
-		c = c->character[chartoi(*word)]; // next node
-		word++; // next character of word	
+		c = c->character[chartoi(*word)]; /* Θέση επόμενου κόμβου */
+		word++; /* Επόμενος χαρακτήρας */
 	}
-	c->leaf = true;
+	c->leaf = true; /* Τέλος λέξης */
 }
 
+/* Προσπελαύνει με την σειρά το δέντρο και ελέγχει αν υπάρχει ο χαρακτήρας */
 bool triesearch(trienode* root, const char* word)
 {
-	if (root == NULL)
+	if (root == NULL) /* Έλεγχος κενού δέντρου */
 	{
 		return false;
 	}
 	
 	trienode* c = root;
-	while (*word)
+	while (*word) /* Σειριακή προσπέλαση λέξης */
 	{
 		c = c->character[chartoi(*word)];
-		if (c == NULL)
+		if (c == NULL) /* Αν ο κόμβος δεν υπάρχει */
 		{
 			return false;
 		}
-		word++;
+		word++; /* Επόμενος χαρακτήρας */
 	}
-	return c->leaf;
+	return c->leaf; /* Επιστρέφει False όταν δεν αναζητείται ολόκληρη λέξη */
 }
 
+/* Βοηθητική συνάρτηση, ανιχνεύει αν ο κόμβος έχει παιδιά */
 static bool child(trienode* node)
 {
-	int i = 0;
-	for (i = 0; i < 26; i++)
+	int i = 0; /* Βοηθητικός μετρητής */
+	for (i = 0; i < 26; i++) /* Προσπελαύνει σειριακά τον πίνακα του κόμβου */
 	{
-		if (node->character[i])
+		if (node->character[i]) /* Αν υπάρχει έστω ένα παιδί */
 		{
 			return true;
 		}
@@ -79,22 +86,27 @@ static bool child(trienode* node)
 	return false;
 }
 
+/* Διαγράφει μια λέξη από την δομή, προσπελαύνοντας ανάποδα το trie μέσω
+   αναδρομής, σβήνοντας τους κόμβους που δεν έχουν παιδιά και ξεμαρκάροντας ως
+   φύλλα τους κόμβους που έχουν παιδιά */
 bool triedelete(trienode** root, const char* word)
 {
-	if (*root == NULL)
+	if (*root == NULL) /* Έλεγχος κενού δέντρου */
 	{
 		return false;
 	}
 	
 	if (*word)
 	{
+		/* Έλεγχοι για αναδρομή */
 		if (*root != NULL &&
 		   (*root)->character[chartoi(*word)] != NULL &&
 		   triedelete(&((*root)->character[chartoi(*word)]), word + 1) &&
 		   (*root)->leaf == false)
 		{
-			if (!child(*root))
+			if (!child(*root)) /* Αν ο κόμβος δεν έχει παιδιά, διαγράφεται */
 			{
+				/* Απελευθέρωση μνήμης */
 				free(*root);
 				(*root) = NULL;
 				return true;
@@ -105,16 +117,18 @@ bool triedelete(trienode** root, const char* word)
 			}
 		}
 	}
-	if (*word == '\0' && (*root)->leaf)
+	if (*word == '\0' && (*root)->leaf) /* Αν τελειώνει εδώ η λέξη */
 	{
-		if (!child(*root))
+		if (!child(*root)) /* Αν ο κόμβος δεν έχει παιδιά, διαγράφεται */
 		{
+			/* Απελευθέρωση μνήμης */
 			free(*root);
 			(*root) = NULL;
 			return true;
 		}
 		else
 		{
+			/* Ξεμαρκάρισμα ως φύλλο, άρα η λέξη δεν υπάρχει */
 			(*root)->leaf = false;
 			return false;
 		}

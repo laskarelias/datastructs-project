@@ -22,8 +22,6 @@ int countlines (char *filename)
 			l++;
 		}
 	}
-	printf("Read %d lines\n", l);
-	
 	fclose(f);
 	
 	return l;
@@ -55,7 +53,6 @@ trienode* filetotrie(char* filename) //l = lines of file
 	
 	while (fscanf(f, "%79s", &word) == 1)
 	{
-		printf("%s", word);
 		trieinsert(&root, word);
 	}
 	fclose(f);
